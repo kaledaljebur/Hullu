@@ -67,6 +67,25 @@ Check open ports from Kali:
 nmap -sV -p21,22,53,80,139,443,445,3306,5000,5053 <Hullu-IP>
 ```
 
+## DVWA
+
+DVWA is the PHP vulnerable web application included in Hullu.
+
+Repository:
+
+https://github.com/digininja/DVWA
+
+Default access:
+
+```text
+http://<Hullu-IP>/dvwa/
+```
+
+Default login:
+
+```text
+admin / password
+```
 ## FlaskVA
 
 FlaskVA is the Python/Flask vulnerable application included in Hullu.
@@ -307,6 +326,7 @@ Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise is
 Email: kaled.aljebur@gmail.com
 
 Project: https://github.com/kaledaljebur/hullu
+
 
 
 
