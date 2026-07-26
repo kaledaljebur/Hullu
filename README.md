@@ -250,11 +250,7 @@ Use SFTP to discuss encrypted file transfer, SSH credentials, and the difference
 
 FTP is useful for teaching file-transfer risks and service misconfiguration. FTP is started by default in Hullu. There is no web page to control FTP, so manage it from the terminal.
 
-Install FTP if needed:
 
-```sh
-apk add vsftpd
-```
 
 Check FTP status:
 
@@ -282,6 +278,18 @@ Remove FTP if needed:
 apk del vsftpd
 ```
 
+Reinstall FTP if it was removed:
+
+```sh
+apk add vsftpd
+```
+
+Enable FTP at boot again:
+
+```sh
+rc-update add vsftpd default
+```
+
 Suggested student activities:
 
 - Enumerate FTP with `nmap`
@@ -302,11 +310,6 @@ ftp <Hullu-IP>
 
 Samba is useful for teaching SMB enumeration, share permissions, and common file exposure mistakes. Samba is started by default in Hullu. There is no web page to control Samba, so manage it from the terminal.
 
-Install Samba if needed:
-
-```sh
-apk add samba samba-common-tools
-```
 
 Check Samba status:
 
@@ -332,6 +335,18 @@ Remove Samba if needed:
 
 ```sh
 apk del samba samba-common-tools
+```
+
+Reinstall Samba if it was removed:
+
+```sh
+apk add samba samba-common-tools
+```
+
+Enable Samba at boot again:
+
+```sh
+rc-update add samba default
 ```
 
 Suggested student activities:
@@ -374,6 +389,7 @@ Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise is
 Email: kaled.aljebur@gmail.com
 
 Project: https://github.com/kaledaljebur/hullu
+
 
 
 
