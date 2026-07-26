@@ -43,8 +43,8 @@ Use the full `http://` address because some browsers may treat `hullu.lab` as a 
 - phpMyAdmin for database administration practice
 - SSH for VM administration
 - SFTP over SSH for encrypted file transfer
-- FTP practice, optional/manual service
-- Samba/SMB practice, optional/manual service
+- FTP service for file-transfer practice
+- Samba/SMB service for share enumeration and permissions practice
 
 ## Common Services and Ports
 
@@ -58,8 +58,8 @@ Use the full `http://` address because some browsers may treat `hullu.lab` as a 
 | MariaDB/MySQL | MySQL | `3306/tcp` | Started | Database-backed labs |
 | FlaskVA | HTTP | `5000/tcp` | Started | Flask vulnerable app |
 | DNS Lab | HTTP | `5053/tcp` | Started | BIND config editor/practice page |
-| FTP | FTP | `21/tcp` | Not started by default | File-transfer practice |
-| Samba | SMB/NetBIOS | `139/tcp`, `445/tcp` | Not started by default | SMB share practice |
+| FTP | FTP | `21/tcp` | Started | File-transfer practice |
+| Samba | SMB/NetBIOS | `139/tcp`, `445/tcp` | Started | SMB share practice |
 
 Check open ports from Kali:
 
@@ -248,30 +248,38 @@ Use SFTP to discuss encrypted file transfer, SSH credentials, and the difference
 
 ## FTP Practice
 
-FTP is useful for teaching file-transfer risks and service misconfiguration. There is no web page to control FTP in Hullu. Start and stop it from the terminal.
+FTP is useful for teaching file-transfer risks and service misconfiguration. FTP is started by default in Hullu. There is no web page to control FTP, so manage it from the terminal.
 
-If FTP is not installed:
+Install FTP if needed:
 
 ```sh
 apk add vsftpd
 ```
 
-Start FTP manually:
+Check FTP status:
+
+```sh
+rc-service vsftpd status
+```
+
+Start, stop, or restart FTP:
 
 ```sh
 rc-service vsftpd start
-```
-
-Stop FTP:
-
-```sh
 rc-service vsftpd stop
+rc-service vsftpd restart
 ```
 
-Enable FTP at boot only if you want it available by default:
+Disable FTP at boot if you do not want it available by default:
 
 ```sh
-rc-update add vsftpd default
+rc-update del vsftpd default
+```
+
+Remove FTP if needed:
+
+```sh
+apk del vsftpd
 ```
 
 Suggested student activities:
@@ -292,30 +300,38 @@ ftp <Hullu-IP>
 
 ## Samba Practice
 
-Samba is useful for teaching SMB enumeration, share permissions, and common file exposure mistakes. There is no web page to control Samba in Hullu. Start and stop it from the terminal.
+Samba is useful for teaching SMB enumeration, share permissions, and common file exposure mistakes. Samba is started by default in Hullu. There is no web page to control Samba, so manage it from the terminal.
 
-If Samba is not installed:
+Install Samba if needed:
 
 ```sh
 apk add samba samba-common-tools
 ```
 
-Start Samba manually:
+Check Samba status:
+
+```sh
+rc-service samba status
+```
+
+Start, stop, or restart Samba:
 
 ```sh
 rc-service samba start
-```
-
-Stop Samba:
-
-```sh
 rc-service samba stop
+rc-service samba restart
 ```
 
-Enable Samba at boot only if you want it available by default:
+Disable Samba at boot if you do not want it available by default:
 
 ```sh
-rc-update add samba default
+rc-update del samba default
+```
+
+Remove Samba if needed:
+
+```sh
+apk del samba samba-common-tools
 ```
 
 Suggested student activities:
@@ -351,13 +367,16 @@ MySQL CLI: root / blank or configured password
 
 ## Notes for Instructors
 
-Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise isolated lab network. Start optional services like FTP and Samba only when needed for a scenario. Reset the VM state between classes or assessment runs when needed.
+Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise isolated lab network. FTP and Samba are started by default in Hullu; stop or disable them when a scenario does not need them. Reset the VM state between classes or assessment runs when needed.
 
 ## Contact
 
 Email: kaled.aljebur@gmail.com
 
 Project: https://github.com/kaledaljebur/hullu
+
+
+
 
 
 
