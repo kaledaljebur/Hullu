@@ -10,7 +10,7 @@ The Hullu OVA image is available from SourceForge:
 
 https://sourceforge.net/projects/hullu/files/
 
-Use the Hullu 3 image if you want the newer DNS practice features. Compared with Hullu 2, Hullu 3 adds BIND 9, the DNS Lab web interface, and separate service accounts for running Flask-based services instead of running them directly as root.
+Use the Hullu 3 image if you want the newer DNS and network-service practice features. Compared with Hullu 2, Hullu 3 adds BIND 9, the DNS Lab web interface, FTP and Samba server support, and separate service accounts for running Flask-based services instead of running them directly as root.
 
 ## Main VM Pages
 
@@ -326,6 +326,7 @@ Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise is
 Email: kaled.aljebur@gmail.com
 
 Project: https://github.com/kaledaljebur/hullu
+
 
 
 
