@@ -139,6 +139,38 @@ Reset to Current IP
 Apply DNS
 ```
 
+### Optional Internet DNS Forwarding
+
+By default, Hullu DNS is intended for the local lab domain. If Kali uses Hullu as its DNS server and you also want Kali to resolve internet domains, edit `/etc/bind/named.conf` in DNS Lab.
+
+Replace:
+
+```conf
+allow-recursion { none; };
+recursion no;
+```
+
+With:
+
+```conf
+recursion yes;
+allow-recursion { any; };
+
+forwarders {
+    8.8.8.8;
+    1.1.1.1;
+};
+```
+
+Then use DNS Lab:
+
+```text
+Check Config
+Apply DNS
+```
+
+This creates an open recursive resolver, so use it only inside an isolated lab network.
+
 ## IP Configuration
 
 Show the current IP address:
@@ -326,6 +358,8 @@ Hullu is designed for learning. Keep the VM in a NAT, host-only, or otherwise is
 Email: kaled.aljebur@gmail.com
 
 Project: https://github.com/kaledaljebur/hullu
+
+
 
 
 
