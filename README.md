@@ -1,4 +1,4 @@
-﻿# Hullu Security Lab
+# Hullu Security Lab
 
 Hullu is a purposely vulnerable Alpine Linux virtual machine for cybersecurity education, ethical hacking practice, and classroom lab scenarios. It includes vulnerable web applications and common network services so students can practice enumeration, exploitation concepts, privilege escalation, DNS configuration, and basic service hardening in an isolated environment.
 
@@ -139,18 +139,9 @@ Reset to Current IP
 Apply DNS
 ```
 
-### Optional Internet DNS Forwarding
+### Default Internet DNS Forwarding
 
-By default, Hullu DNS is intended for the local lab domain. If Kali uses Hullu as its DNS server and you also want Kali to resolve internet domains, edit `/etc/bind/named.conf` in DNS Lab.
-
-Replace:
-
-```conf
-allow-recursion { none; };
-recursion no;
-```
-
-With:
+By default, Hullu can resolve both the local `hullu.lab` domain and internet domains when Kali uses Hullu as its DNS server. The main BIND configuration in `/etc/bind/named.conf` includes:
 
 ```conf
 recursion yes;
@@ -162,6 +153,31 @@ forwarders {
 };
 ```
 
+This makes DNS practice easier because Kali can use one DNS server for both the lab domain and normal internet lookups.
+
+This also creates an open recursive resolver, so use it only inside an isolated lab network.
+
+To remove internet DNS forwarding and make Hullu resolve only the local lab domain, edit `/etc/bind/named.conf` in DNS Lab.
+
+Replace:
+
+```conf
+recursion yes;
+allow-recursion { any; };
+
+forwarders {
+    8.8.8.8;
+    1.1.1.1;
+};
+```
+
+With:
+
+```conf
+allow-recursion { none; };
+recursion no;
+```
+
 Then use DNS Lab:
 
 ```text
@@ -169,7 +185,11 @@ Check Config
 Apply DNS
 ```
 
-This creates an open recursive resolver, so use it only inside an isolated lab network.
+If you also want the **Reset This File** button to restore local-only DNS, update the reset template too:
+
+```text
+/opt/dnslab/defaults/named.conf
+```
 
 ## IP Configuration
 
