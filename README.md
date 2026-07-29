@@ -108,7 +108,7 @@ admin / mustang
 
 ## DNS Lab
 
-DNS Lab is a small Flask interface for practicing BIND configuration. It lets students edit selected DNS files, check the configuration, apply changes, and reset records when the VM IP changes.
+DNS Lab is a small Flask interface for practicing BIND configuration. It lets students edit selected DNS files, create forward zones, add web or mail record templates, check the configuration, apply changes, and reset records when needed.
 
 Default access:
 
@@ -122,6 +122,7 @@ Main DNS files:
 /etc/bind/named.conf
 /var/bind/pri/hullu.lab.zone
 /var/bind/pri/reverse.zone
+/var/bind/pri/<zone-name>.zone
 ```
 
 If Kali uses Hullu as its DNS server, test the lab domain:
@@ -132,12 +133,42 @@ dig @<Hullu-IP> www.hullu.lab A
 dig @<Hullu-IP> -x <Hullu-IP>
 ```
 
-If Hullu is moved to a new network, first renew or configure the VM IP, then use DNS Lab:
+When Hullu boots, it automatically updates the built-in `hullu.lab` forward zone, current reverse zone, and DNS Lab defaults to the current VM IP. Custom zones are preserved.
+
+You can still update the built-in Hullu records manually from DNS Lab when needed:
 
 ```text
 Reset to Current IP
 Apply DNS
 ```
+
+### Creating Zones
+
+Use the **Zones** page to create or extend forward zones without manually editing `/etc/bind/named.conf`.
+
+When you use **Create / Add Template**, DNS Lab automatically:
+
+- creates the zone file in `/var/bind/pri/`
+- adds the zone block to `/etc/bind/named.conf`
+- creates a default copy in `/opt/dnslab/defaults/`
+
+Zone templates:
+
+```text
+Basic web zone: @, ns1, www
+Basic mail zone: @, ns1, MX, mail, smtp, imap
+```
+
+If a custom zone already exists, using another template with the same zone name adds only the missing records. For example, create a web zone first, then use the mail template later to add MX and mail records.
+
+Created zones are not applied immediately. After creating or adding a template, click **Edit**, review the zone, then use:
+
+```text
+Check Config
+Apply DNS
+```
+
+Built-in zones such as `hullu.lab` and the current reverse zone are protected from deletion. Custom zones can be edited or deleted from the Zones page.
 
 ### Default Internet DNS Forwarding
 
@@ -235,12 +266,22 @@ Then restart networking or reboot:
 rc-service networking restart
 ```
 
-After changing the VM IP, open DNS Lab and run:
+After changing the VM IP or cloning the OVA into a new network, Hullu automatically updates the built-in `hullu.lab` and reverse DNS records during boot.
 
-```text
-Reset to Current IP
-Apply DNS
+The updater service is:
+
+```sh
+rc-service hullu-dns-ip status
 ```
+
+Run it manually if needed:
+
+```sh
+/usr/local/sbin/update-hullu-dns-ip
+rc-service named reload
+```
+
+Custom zones are preserved and are not automatically rewritten to the Hullu IP.
 
 ## SFTP Practice
 
