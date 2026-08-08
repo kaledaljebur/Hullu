@@ -4,6 +4,10 @@ Hullu is a purposely vulnerable Alpine Linux virtual machine for cybersecurity e
 
 Do not expose this VM to the internet. Use it only in a private lab network.
 
+## Screenshot
+
+![alt text](Hullu.png)
+
 ## Download
 
 The Hullu OVA image is available from SourceForge:
