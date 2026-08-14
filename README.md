@@ -16,6 +16,12 @@ https://sourceforge.net/projects/hullu/files/
 
 Use the Hullu 3 image if you want the newer DNS and network-service practice features. Compared with Hullu 2, Hullu 3 adds BIND 9, the DNS Lab web interface, FTP and Samba server support, and separate service accounts for running Flask-based services instead of running them directly as root.
 
+## Scenarios
+
+
+
+Classroom attack and defense walkthroughs are available in [scenario.md](scenario.md), including the DVWA upload scenario and beginner blue-team investigation commands. 
+
 ## Main VM Pages
 
 Replace `<Hullu-IP>` with the current VM address.
