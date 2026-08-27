@@ -31,21 +31,25 @@ Setup: connect the 4 lab VMs to the same isolated virtual network. All IPs in th
 | Detection | [SuriZuh](https://github.com/kaledaljebur/SuriZuh) | Wazuh + Suricata VM |
 | Local Email VM | [CyberMail-Server](https://github.com/kaledaljebur/CyberMail-Server) | Local phishing delivery |
 
-## MITRE ATT&CK Map
+## MITRE ATT&CK Mapping
 
-| Step | Technique |
-|---|---|
-| Spear phishing attachment | [T1566.001 - Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/) |
-| User opens malicious file | [T1204.002 - User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/) |
-| Exploit vulnerable PDF reader | [T1203 - Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203/) |
-| Reverse shell / command channel | [T1105 - Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105/) |
-| Hash dump | [T1003 - OS Credential Dumping](https://attack.mitre.org/techniques/T1003/) |
-| Browser credential access | [T1555.003 - Credentials from Web Browsers](https://attack.mitre.org/techniques/T1555/003/) |
-| Use stolen credentials | [T1078 - Valid Accounts](https://attack.mitre.org/techniques/T1078/) |
-| Move to Hullu services | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/) |
-| Web shell | [T1505.003 - Web Shell](https://attack.mitre.org/techniques/T1505/003/) |
-| Scheduled task persistence | [T1053.005 - Scheduled Task](https://attack.mitre.org/techniques/T1053/005/) |
-| Exfil through web shell | [T1041 - Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/) |
+**Scenario:** Spear Phishing -> Deliver Trojan File to Client -> Hash Dump -> Lateral Movement to Web Server -> Web Shell Creation -> Lateral Movement to DB Machine -> Schedule Tasks on Target -> Exfiltration using Web Shell
+
+| Scenario Step | MITRE ATT&CK Technique | Tactic |
+|---|---|---|
+| Spear Phishing | [T1566.001 - Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/) | Initial Access |
+| Deliver Trojan File to Client | [T1204.002 - User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/), [T1105 - Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105/) | Execution / Command and Control |
+| Hash Dump | [T1003 - OS Credential Dumping](https://attack.mitre.org/techniques/T1003/), [T1003.001 - LSASS Memory](https://attack.mitre.org/techniques/T1003/001/), [T1003.002 - Security Account Manager](https://attack.mitre.org/techniques/T1003/002/) | Credential Access |
+| Lateral Movement to Web Server | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/), [T1021.002 - SMB/Windows Admin Shares](https://attack.mitre.org/techniques/T1021/002/), [T1021.006 - Windows Remote Management](https://attack.mitre.org/techniques/T1021/006/) | Lateral Movement |
+| Use Dumped Hashes | [T1550.002 - Pass the Hash](https://attack.mitre.org/techniques/T1550/002/) | Lateral Movement |
+| Web Shell Creation | [T1505.003 - Server Software Component: Web Shell](https://attack.mitre.org/techniques/T1505/003/) | Persistence |
+| Lateral Movement to DB Machine | [T1021 - Remote Services](https://attack.mitre.org/techniques/T1021/), [T1078 - Valid Accounts](https://attack.mitre.org/techniques/T1078/) | Lateral Movement / Defense Evasion / Persistence |
+| Schedule Tasks on Target | [T1053.005 - Scheduled Task](https://attack.mitre.org/techniques/T1053/005/) | Execution / Persistence / Privilege Escalation |
+| Exfiltration using Web Shell | [T1041 - Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041/), [T1071.001 - Application Layer Protocol: Web Protocols](https://attack.mitre.org/techniques/T1071/001/) | Exfiltration / Command and Control |
+
+- Compact Technique Chain
+
+  `T1566.001 -> T1204.002 -> T1105 -> T1003 -> T1550.002 -> T1021 -> T1505.003 -> T1021/T1078 -> T1053.005 -> T1071.001/T1041`
 
 ## Red Team Notes
 
