@@ -79,7 +79,7 @@ After restart:
 
 ## `Deliver Trojan PDF` & `Deliver Trojan File to Client`
 
-Use SEToolkit in Kali:
+Use SEToolkit in Kali `sudo setoolkit` :
 
 ```text
 1 Social Engineering Attacks
