@@ -10,6 +10,8 @@ Do not expose this VM to the internet. Use it only in a private lab network.
 
 ![alt text](figures/Hullu2.png)
 
+![alt text](figures/Hullu3.png)
+
 ## Download
 
 The Hullu OVA image is available from SourceForge:
