@@ -6,7 +6,9 @@ Do not expose this VM to the internet. Use it only in a private lab network.
 
 ## Screenshot
 
-![alt text](Hullu.png)
+![alt text](figures/Hullu.png)
+
+![alt text](figures/Hullu2.png)
 
 ## Download
 
