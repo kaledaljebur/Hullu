@@ -131,7 +131,7 @@ Expected result: Meterpreter session from the Windows client to Kali.
 
   ```sh
   # In terminal 2: 
-  mkdir -p ~/Desktop/226_part3/firefox && cd Desktop
+  mkdir -p ~/Desktop/226_part3/firefox && cd ~/Desktop/226_part3
 
   # In terminal 1 in meterpreter session:
   # Make sure to use you Kali's username instead of 'kaled' in the below command
